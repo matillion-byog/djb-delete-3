@@ -1,0 +1,63 @@
+type: "orchestration"
+version: "1.0"
+pipeline:
+  components:
+    Start:
+      type: "start"
+      transitions:
+        unconditional:
+        - "Create Table"
+      parameters:
+        componentName: "Start"
+    Create Table:
+      type: "create-table"
+      transitions:
+        success:
+        - "Delete Tables"
+      parameters:
+        componentName: "Create Table"
+        createReplace: "Create if not exists"
+        database: "[Environment Default]"
+        schema: "[Environment Default]"
+        newTableName: "DJB_DELETE"
+        tableType: "Permanent"
+        columns:
+        - - "id"
+          - "NUMBER"
+          - "5"
+          - ""
+          - ""
+          - "No"
+          - "No"
+          - ""
+        defaultDdlCollation:
+        primaryKeys:
+        clusteringKeys:
+        dataRetentionTimeInDays:
+        comment:
+    Delete Tables:
+      type: "delete-tables"
+      parameters:
+        componentName: "Delete Tables"
+        database: "[Environment Default]"
+        schema: "[Environment Default]"
+        targetTable:
+        - "DJB_DELETE"
+        ignoreMissing: "Yes"
+design:
+  components:
+    Start:
+      position:
+        x: 0
+        "y": 0
+      tempMetlId: 1
+    Create Table:
+      position:
+        x: 120
+        "y": 0
+      tempMetlId: 2
+    Delete Tables:
+      position:
+        x: 240
+        "y": 0
+      tempMetlId: 3
